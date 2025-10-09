@@ -1,0 +1,3 @@
+../Core/Src/adc.c:7:6:ADC1_DMA2_init	2
+../Core/Src/adc.c:55:6:start_conversion	1
+../Core/Src/adc.c:61:10:adc_read	2
