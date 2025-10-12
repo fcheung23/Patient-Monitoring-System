@@ -1,7 +1,17 @@
 # Patient Monitoring System
 
-![Project Image](images/project_photo.jpg)  
-*Photo of the Patient Monitoring Device in action*
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="images/project_photo.jpg" alt="Patient Monitoring Device" height="230"><br>
+      Working test on my hand!
+    </td>
+    <td align="center">
+      <img src="images/log.jpg" alt="Serial Log Output" height="230"><br>
+      View from logger
+    </td>
+  </tr>
+</table>
 
 ## Description
 This project is a real-time patient monitoring platform built on the **STM32 Nucleo-F446RE** (ARM Cortex-M4) using **FreeRTOS APIs**.  
