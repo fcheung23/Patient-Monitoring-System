@@ -7,7 +7,7 @@
       Working test on my hand!
     </td>
     <td align="center">
-      <img src="images/log.jpg" alt="Serial Log Output" height="230"><br>
+      <img src="images/log.png" alt="Serial Log Output" height="230"><br>
       View from logger
     </td>
   </tr>
