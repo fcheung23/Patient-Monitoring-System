@@ -1,6 +1,6 @@
 # Patient Monitoring System
 
-![Project Image](images/project_photo.heic)  
+![Project Image](images/project_photo.jpg)  
 *Photo of the Patient Monitoring Device in action*
 
 ## Description
