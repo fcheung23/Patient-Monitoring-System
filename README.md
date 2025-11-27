@@ -15,9 +15,9 @@
 
 ## Description
 This project is a real-time patient monitoring platform built on the **STM32 Nucleo-F446RE** (ARM Cortex-M4) using **FreeRTOS APIs**.  
-It simultaneously collects and processes differing physiological data, including **pulse, temperature, and motion**, using the **KY-039, TMP36, and ADXL345 sensors**.  
+It simultaneously collects and processes differing physiological data, including **pulse, temperature, and motion**, using the **KY-039, TMP36, and ADXL345 sensors**. I intended it to be a prototype for the internals of a wearable system.   
 
-I applied embedded engineering principles by developing **bare-metal sensor drivers**, implementing **FreeRTOS task management**, and integrating multiple sensors for real-time physiological monitoring.
+My main objectives were developing the **bare-metal sensor drivers**, implementing **FreeRTOS task management**, and integrating multiple sensors for real-time physiological monitoring.
 
 ## Features
 - Low-level drivers for ADC, DMA, and I2C to reliably read multiple sensors.  
