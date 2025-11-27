@@ -8,7 +8,7 @@
     </td>
     <td align="center">
       <img src="images/log.png" alt="Serial Log Output" height="230"><br>
-      View from logger
+      View from logger (note: should be g)
     </td>
   </tr>
 </table>
