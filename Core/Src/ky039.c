@@ -4,37 +4,48 @@
 #include "stm32f4xx.h"
 #include "adc.h"
 
-uint32_t ky039_raw_value;
+#define SAMPLE_SIZE   20       // Number of readings for moving average
+#define RISE_COUNT    5        // Consecutive rising samples to detect beat
 
-#define THRESHOLD 2000
-#define SAMPLE_PERIOD_MS 10
-#define MEASUREMENT_TIME_MS 1000  // 10 second window
+static uint32_t readings[SAMPLE_SIZE] = {0};
+static uint32_t sum = 0;
+static uint8_t ptr = 0;
 
 static uint32_t last_value = 0;
-static uint32_t beat_count = 0;
-static uint32_t sample_counter = 0;
+static uint32_t last_beat_time = 0;
+static int32_t bpm = -1;
 
-int32_t read_heart(void)
+int32_t read_heart(uint32_t current_time_ms)
 {
-	ky039_raw_value = adc_read(0) * 500;  // ky09 -> PA0-> CH0
+    // Read sensor and update moving average
+    uint32_t raw = adc_read(0) * 500;
+    sum -= readings[ptr];
+    sum += raw;
+    readings[ptr] = raw;
+    ptr = (ptr + 1) % SAMPLE_SIZE;
+    uint32_t avg = sum / SAMPLE_SIZE;
 
-    // Detect rising edge
-    if (ky039_raw_value > THRESHOLD && last_value <= THRESHOLD)
+    // Detect rising slope
+    static uint8_t rise_count = 0;
+    if (avg > last_value)
+        rise_count++;
+    else
+        rise_count = 0;
+
+    // Beat detected when consecutive rises reach threshold
+    if (rise_count >= RISE_COUNT)
     {
-        beat_count++;
-    }
-    last_value = ky039_raw_value;
-
-    sample_counter += SAMPLE_PERIOD_MS;
-
-    // Every MEASUREMENT_TIME_MS, compute BPM and reset
-    if (sample_counter >= MEASUREMENT_TIME_MS)
-    {
-        int32_t bpm = beat_count * (6000 / MEASUREMENT_TIME_MS);  // 1 minute scale
-        beat_count = 0;
-        sample_counter = 0;
-        return bpm;
+        if (current_time_ms - last_beat_time > 300) // minimum interval to avoid double-counting
+        {
+            uint32_t interval = current_time_ms - last_beat_time;
+            bpm = 60000 / interval;   // Convert IBI to BPM
+            last_beat_time = current_time_ms;
+        }
+        rise_count = 0; // reset for next beat
     }
 
-    return -1; // if bpm not ready
+    last_value = avg;
+
+    return bpm; // Returns -1 if no new beat detected
 }
+
