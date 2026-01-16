@@ -49,6 +49,8 @@ int main(void)
 	adxl_init();		// adxl345
 	start_conversion();	// tmp36 + ky039
 
+	queue_setup();
+
 	xTaskCreate(ReceiverTask, "Receiver Task", 100, NULL, 1, &receiver_handle);
 
 	// Pass in pointer to structs with just the sDataSource info
