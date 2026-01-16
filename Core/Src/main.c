@@ -111,16 +111,16 @@ void SenderTask(void *pvParameters)
 		{
 			case temperature_sensor:
 				pPacket->payload.temp.tempValue = read_tmp();
-				qState = xQueueSend(xTempQueue, pPacket, wait_time);
+				qState = xQueueOverwrite(xTempQueue, pPacket);
 				break;
 			case heartbeat_sensor:
 				int possible_bpm = read_heart();  // Make sure new reading is available
 				if (possible_bpm != -1) pPacket->payload.heart.bpmValue = possible_bpm;
-				qState = xQueueSend(xHeartQueue, pPacket, wait_time);
+				qState = xQueueOverwrite(xHeartQueue, pPacket);
 				break;
 			case accelerometer_sensor:
 				pPacket->payload.accel.vectorMag = read_accel();
-				qState = xQueueSend(xAccelQueue, pPacket, wait_time);
+				qState = xQueueOverwrite(xAccelQueue, pPacket);
 				break;
 			default:
 				printf("Error: Invalid sensor source.");
