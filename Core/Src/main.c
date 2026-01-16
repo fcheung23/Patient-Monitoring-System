@@ -100,9 +100,8 @@ int __io_putchar(int ch)
 void SenderTask(void *pvParameters)
 {
 	BaseType_t qState;
-	const TickType_t wait_time = pdMS_TO_TICKS(200);
 	Data_t *pPacket = pvParameters;
-	queue_setup();
+	TickType_t sampleDelay; 
 
 	while(1)
 	{
@@ -112,18 +111,22 @@ void SenderTask(void *pvParameters)
 			case temperature_sensor:
 				pPacket->payload.temp.tempValue = read_tmp();
 				qState = xQueueOverwrite(xTempQueue, pPacket);
+				sampleDelay = 1000; // 1 second
 				break;
 			case heartbeat_sensor:
 				int possible_bpm = read_heart();  // Make sure new reading is available
 				if (possible_bpm != -1) pPacket->payload.heart.bpmValue = possible_bpm;
 				qState = xQueueOverwrite(xHeartQueue, pPacket);
+				sampleDelay = 250; // 250 ms
 				break;
 			case accelerometer_sensor:
 				pPacket->payload.accel.vectorMag = read_accel();
 				qState = xQueueOverwrite(xAccelQueue, pPacket);
+				sampleDelay = 100; // 100 ms
 				break;
 			default:
 				printf("Error: Invalid sensor source.");
+				sampleDelay = 500;
 				break;
 		}
 
@@ -132,7 +135,7 @@ void SenderTask(void *pvParameters)
 			printf("Error: Send failed for %d\r\n", pPacket->sDataSource);
 		}
 
-		vTaskDelay(pdMS_TO_TICKS(10));
+		vTaskDelay(pdMS_TO_TICKS(sampleDelay));
 	}
 }
 
