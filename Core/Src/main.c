@@ -117,7 +117,7 @@ void SenderTask(void *pvParameters)
 				int possible_bpm = read_heart();  // Make sure new reading is available
 				if (possible_bpm != -1) pPacket->payload.heart.bpmValue = possible_bpm;
 				qState = xQueueOverwrite(xHeartQueue, pPacket);
-				sampleDelay = 250; // 250 ms
+				sampleDelay = 20; // 20 ms
 				break;
 			case accelerometer_sensor:
 				pPacket->payload.accel.vectorMag = read_accel();
